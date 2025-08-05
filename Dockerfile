@@ -7,17 +7,43 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     git \
     wget \
+    curl \
     libgl1-mesa-glx \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
     libxrender-dev \
     libgomp1 \
+    libglib2.0-0 \
+    libfontconfig1 \
+    libxrender1 \
+    libxtst6 \
+    libxi6 \
+    libxrandr2 \
+    libasound2 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements and install Python dependencies
+# Upgrade pip and install basic packages first
+RUN pip install --upgrade pip setuptools wheel
+
+# Copy requirements and install Python dependencies in stages
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
+# Install core dependencies first
+RUN pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cu118
+
+# Install other dependencies
+RUN pip install --no-cache-dir \
+    diffusers>=0.21.0 \
+    transformers>=4.30.0 \
+    accelerate>=0.20.0 \
+    safetensors>=0.3.0 \
+    Pillow>=10.0.0 \
+    numpy>=1.24.0 \
+    opencv-python-headless>=4.8.0 \
+    flask>=2.3.0 \
+    requests>=2.31.0 \
+    runpod>=1.5.0
 
 # Clone Kolors repository
 RUN git clone https://github.com/Kwai-Kolors/Kolors.git /app/Kolors

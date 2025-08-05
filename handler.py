@@ -5,9 +5,17 @@ import io
 import time
 import os
 from PIL import Image
-from diffusers import StableDiffusionXLPipeline
+try:
+    from diffusers import StableDiffusionXLPipeline
+except ImportError:
+    print("Warning: diffusers not available, using fallback")
+    StableDiffusionXLPipeline = None
 import numpy as np
-import cv2
+try:
+    import cv2
+except ImportError:
+    print("Warning: opencv not available")
+    cv2 = None
 
 # Global variables for model loading
 pipe = None
