@@ -1,0 +1,24 @@
+{
+  "name": "Kolors Virtual Try-On",
+  "description": "AI-powered virtual clothing try-on using Kolors diffusion model",
+  "dockerArgs": "",
+  "containerDiskInGb": 20,
+  "volumeInGb": 10,
+  "volumeMountPath": "/workspace",
+  "ports": "8000/http",
+  "env": [
+    {
+      "key": "TORCH_HOME",
+      "value": "/workspace/models"
+    },
+    {
+      "key": "HF_HOME", 
+      "value": "/workspace/models"
+    },
+    {
+      "key": "PYTHONPATH",
+      "value": "/app:/app/Kolors"
+    }
+  ],
+  "startScript": "cd /app && python handler.py"
+}
